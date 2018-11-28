@@ -1,3 +1,4 @@
+/*! (c) Andrea Giammarchi - ISC */
 var templateLiteral = (function () {'use strict';
   var RAW = 'raw';
   var isNoOp = false;
