@@ -1,0 +1,1 @@
+var templateLiteral=function(){"use strict";var r=!1,e=function(t){if(!("raw"in t)||t.propertyIsEnumerable("raw")||!Object.isFrozen(t.raw)||/Firefox\/(\d+)/.test((document.defaultView.navigator||{}).userAgent)&&parseFloat(RegExp.$1)<55){var n={};return(e=function(r){var e="raw"+r.join("raw");return n[e]||(n[e]=r)})(t)}return r=!0,t};return function(t){return r?t:e(t)}}();
