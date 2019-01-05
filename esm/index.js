@@ -20,7 +20,8 @@ var templateLiteral = (function () {'use strict';
     ) {
       var forever = {};
       templateLiteral = function (tl) {
-        var key = tl.length + ',' + tl.join(',');
+        for (var key = '.', i = 0; i < tl.length; i++)
+          key += tl[i].length + '.' + tl[i];
         return forever[key] || (forever[key] = tl);
       };
     } else {
