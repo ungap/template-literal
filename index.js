@@ -9,7 +9,7 @@ var templateLiteral = (function () {'use strict';
       // for some version of TypeScript
       tl.propertyIsEnumerable(RAW) ||
       // and some other version of TypeScript
-      !Object.isFrozen(tl.raw) ||
+      !Object.isFrozen(tl[RAW]) ||
       (
         // or for Firefox < 55
         /Firefox\/(\d+)/.test(
@@ -20,7 +20,7 @@ var templateLiteral = (function () {'use strict';
     ) {
       var forever = {};
       templateLiteral = function (tl) {
-        var key = RAW + tl.join(RAW);
+        var key = tl.length + ',' + tl.join(',');
         return forever[key] || (forever[key] = tl);
       };
     } else {
