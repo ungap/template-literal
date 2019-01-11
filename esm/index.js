@@ -1,7 +1,7 @@
 /*! (c) Andrea Giammarchi - ISC */
 var templateLiteral = (function () {'use strict';
   var RAW = 'raw';
-  var isNoOp = false;
+  var isNoOp = typeof document !== 'object';
   var templateLiteral = function (tl) {
     if (
       // for badly transpiled literals
