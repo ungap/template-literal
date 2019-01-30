@@ -6,6 +6,6 @@ A feature detected fix for non unique [template literals](https://developer.mozi
 
   * CDN as global utility via https://unpkg.com/@ungap/template-literal
   * ESM via `import templateLiteral from '@ungap/template-literal'`
-  * CJS via `const Map = templateLiteral('@ungap/template-literal')`
+  * CJS via `const templateLiteral = require('@ungap/template-literal')`
 
 [Live test](https://ungap.github.io/template-literal/test/)
