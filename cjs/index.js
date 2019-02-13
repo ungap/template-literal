@@ -1,6 +1,6 @@
 /*! (c) Andrea Giammarchi - ISC */
 var templateLiteral = (function () {'use strict';
-  var RAW = 'raw';
+  var UA, RAW = 'raw';
   var isNoOp = typeof document !== 'object';
   var templateLiteral = function (tl) {
     if (
@@ -12,10 +12,13 @@ var templateLiteral = (function () {'use strict';
       !Object.isFrozen(tl[RAW]) ||
       (
         // or for Firefox < 55
-        /Firefox\/(\d+)/.test(
-          (document.defaultView.navigator || {}).userAgent
-        ) &&
-        parseFloat(RegExp.$1) < 55
+        /(Firefox|Safari)\/(\d+)/.test(
+          UA = (document.defaultView.navigator || {}).userAgent
+        ) && (
+          RegExp.$1 == 'Firefox' ?
+            (RegExp.$2 < 55) :
+            !/(Chrome|Android)\/(\d+)/.test(UA)
+        )
       )
     ) {
       var forever = {};
