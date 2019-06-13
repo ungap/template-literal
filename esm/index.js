@@ -1,7 +1,15 @@
 /*! (c) Andrea Giammarchi - ISC */
 var templateLiteral = (function () {'use strict';
-  var UA, RAW = 'raw';
+  var RAW = 'raw';
   var isNoOp = typeof document !== 'object';
+  var isBroken = function (UA) {
+    var broken = /(Firefox|Safari)\/(\d+)/.exec(UA);
+    return !!broken && !/(Chrom|Android)\/(\d+)/.test(UA);
+    /* && (
+      (broken[1] === 'Firefox' && (broken[2] < 55) || (broken[2] > 65)) ||
+      (broken[1] === 'Safari' && broken[2] > 539)
+    ); */
+  };
   var templateLiteral = function (tl) {
     if (
       // for badly transpiled literals
@@ -10,16 +18,8 @@ var templateLiteral = (function () {'use strict';
       tl.propertyIsEnumerable(RAW) ||
       // and some other version of TypeScript
       !Object.isFrozen(tl[RAW]) ||
-      (
-        // or for Firefox < 55
-        /(Firefox|Safari)\/(\d+)/.test(
-          UA = (document.defaultView.navigator || {}).userAgent
-        ) && (
-          RegExp.$1 == 'Firefox' ?
-            (RegExp.$2 < 55) :
-            !/(Chrome|Android)\/(\d+)/.test(UA)
-        )
-      )
+      // check some messed up browser or version
+      isBroken((document.defaultView.navigator || {}).userAgent)
     ) {
       var forever = {};
       templateLiteral = function (tl) {
