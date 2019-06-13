@@ -1,40 +1,51 @@
-/*! (c) Andrea Giammarchi - ISC */
-var templateLiteral = (function () {'use strict';
+'use strict';
+const WeakMap = (require('@ungap/weakmap'));
+
+var isNoOp = typeof document !== 'object';
+
+var templateLiteral = function (tl) {
   var RAW = 'raw';
-  var isNoOp = typeof document !== 'object';
   var isBroken = function (UA) {
-    var broken = /(Firefox|Safari)\/(\d+)/.exec(UA);
-    return !!broken && !/(Chrom|Android)\/(\d+)/.test(UA);
-    /* && (
-      (broken[1] === 'Firefox' && (broken[2] < 55) || (broken[2] > 65)) ||
-      (broken[1] === 'Safari' && broken[2] > 539)
-    ); */
+    return /(Firefox|Safari)\/(\d+)/.test(UA) &&
+          !/(Chrom|Android)\/(\d+)/.test(UA);
   };
-  var templateLiteral = function (tl) {
-    if (
-      // for badly transpiled literals
-      !(RAW in tl) ||
-      // for some version of TypeScript
-      tl.propertyIsEnumerable(RAW) ||
-      // and some other version of TypeScript
-      !Object.isFrozen(tl[RAW]) ||
-      // check some messed up browser or version
-      isBroken((document.defaultView.navigator || {}).userAgent)
-    ) {
-      var forever = {};
-      templateLiteral = function (tl) {
-        for (var key = '.', i = 0; i < tl.length; i++)
-          key += tl[i].length + '.' + tl[i];
-        return forever[key] || (forever[key] = tl);
+  var broken = isBroken((document.defaultView.navigator || {}).userAgent);
+  var FTS = !(RAW in tl) ||
+            tl.propertyIsEnumerable(RAW) ||
+            !Object.isFrozen(tl[RAW]);
+  if (broken || FTS) {
+    var forever = {};
+    var foreverCache = function (tl) {
+      for (var key = '.', i = 0; i < tl.length; i++)
+        key += tl[i].length + '.' + tl[i];
+      return forever[key] || (forever[key] = tl);
+    };
+    // Fallback TypeScript shenanigans
+    if (FTS)
+      templateLiteral = foreverCache;
+    // try fast path for other browsers:
+    // store the template as WeakMap key
+    // and forever cache it only when it's not there.
+    // this way performance is still optimal,
+    // penalized only when there are GC issues
+    else {
+      var wm = new WeakMap;
+      var set = function (tl, unique) {
+        wm.set(tl, unique);
+        return unique;
       };
-    } else {
-      isNoOp = true;
+      templateLiteral = function (tl) {
+        return wm.get(tl) || set(tl, foreverCache(tl));
+      };
     }
-    return TL(tl);
-  };
-  return TL;
-  function TL(tl) {
-    return isNoOp ? tl : templateLiteral(tl);
+  } else {
+    isNoOp = true;
   }
-}());
-module.exports = templateLiteral;
+  return TL(tl);
+};
+
+module.exports = TL;
+
+function TL(tl) {
+  return isNoOp ? tl : templateLiteral(tl);
+}
