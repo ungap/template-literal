@@ -6,7 +6,7 @@ var templateLiteral = function (tl) {
   var RAW = 'raw';
   var isBroken = function (UA) {
     return /(Firefox|Safari)\/(\d+)/.test(UA) &&
-          !/(Chrom|Android)\/(\d+)/.test(UA);
+          !/(Chrom[eium]+|Android)\/(\d+)/.test(UA);
   };
   var broken = isBroken((document.defaultView.navigator || {}).userAgent);
   var FTS = !(RAW in tl) ||
