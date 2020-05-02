@@ -54,6 +54,6 @@
   },
   "homepage": "https://github.com/ungap/map#readme",
   "dependencies": {
-    "@ungap/weakmap": "^0.1.4"
+    "@ungap/weakmap": "^0.2.0"
   }
 }
