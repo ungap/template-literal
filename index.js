@@ -2,7 +2,7 @@ var templateLiteral = (function (exports) {
   'use strict';
 
   /*! (c) Andrea Giammarchi - ISC */
-  var self = null || /* istanbul ignore next */ {};
+  var self = {};
   try { self.WeakMap = WeakMap; }
   catch (WeakMap) {
     // this could be better but 90% of the time
