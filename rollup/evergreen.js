@@ -16,6 +16,7 @@ export default {
   context: 'null',
   moduleContext: 'null',
   output: {
+    esModule: false,
     file: 'eg.js',
     format: 'iife',
     name: 'templateLiteral'
